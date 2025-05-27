@@ -1,0 +1,9 @@
+<div class="flex items-center w-full">
+  <input
+    class="mx-4 w-full p-3 text-base border border-gray-900 rounded-full"
+    type="text"
+    [(ngModel)]="searchTerm"
+    (input)="onSearch($event)"
+    placeholder="Search posts..."
+  />
+</div>
