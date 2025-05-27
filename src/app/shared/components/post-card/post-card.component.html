@@ -1,0 +1,13 @@
+<div class="flex items-center mb-3">
+  <!-- <div class="w-10 h-10 rounded-full bg-gray-300 mr-3"></div> -->
+  <img [src]="profilePictureUrl | async" class="w-10 h-10 rounded-full mr-3" />
+  <div class="flex items-center gap-4">
+    <ng-container *ngIf="user$ | async as user">
+      <span class="font-semibold">{{ user.name }}</span>
+      <span class="text-sm text-gray-500 mr-2">&#64;{{ user.username }}</span>
+      <span class="text-sm text-gray-500">{{ timestamp }}</span>
+    </ng-container>
+  </div>
+</div>
+<h2 class="text-lg font-semibold mb-2">{{ post.title }}</h2>
+<p class="mb-3 text-gray-600">{{ post.body }}</p>
