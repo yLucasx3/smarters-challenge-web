@@ -10,12 +10,13 @@ import { PostService } from '../../../core/services/post.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { CommentsListComponent } from '@app/shared/components/comments-list/comments-list.component';
-import { CommentFormComponent } from '@app/shared/components/comment-form/comment-form.component';
-import { Post } from '@app/core/models/post.model';
+import { CommentFormComponent } from '@app/features/posts/post-details/components/comment-form/comment-form.component';
+import { Post } from '@app/models/post.model';
 import { UserService } from '@app/core/services/user.service';
-import { Comment } from '@app/core/models/comment.model';
+import { Comment } from '@app/models/comment.model';
 import { PostCardComponent } from '@app/shared/components/post-card/post-card.component';
+import { User } from '@app/models/user.model';
+import { CommentsListComponent } from './components/comments-list/comments-list.component';
 
 @Component({
   selector: 'app-post-detail',
@@ -36,7 +37,7 @@ export class PostDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   post$!: Observable<Post>;
-  user$!: Observable<{ username: string; handle: string }>;
+  user$!: Observable<User>;
   comments$!: Observable<Comment[]>;
   postId!: number;
   localComments: Comment[] = [];
@@ -53,12 +54,7 @@ export class PostDetailComponent implements OnInit {
     );
 
     this.user$ = this.post$.pipe(
-      switchMap((post) => this.userService.getUser(post.userId)),
-      map((user) => ({
-        username: user.name,
-        handle: `@${user.username.toLowerCase()}`,
-      })),
-      catchError(() => of({ username: 'Unknown User', handle: '@unknown' }))
+      switchMap((post) => this.userService.getUser(post.userId))
     );
 
     this.comments$ = this.route.paramMap.pipe(

@@ -1,7 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostService } from '../../../core/services/post.service';
-import { Post } from '../../../core/models/post.model';
 import {
   Observable,
   BehaviorSubject,
@@ -13,6 +11,8 @@ import { SearchBarComponent } from '@app/shared/components/search-bar/search-bar
 import { PaginationComponent } from '@app/shared/components/pagination/pagination.component';
 import { PostCardComponent } from '@app/shared/components/post-card/post-card.component';
 import { RouterModule } from '@angular/router';
+import { PostService } from '@app/core/services/post.service';
+import { Post } from '@app/models/post.model';
 
 @Component({
   selector: 'app-post-feed',

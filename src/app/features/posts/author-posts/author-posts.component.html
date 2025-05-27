@@ -1,0 +1,14 @@
+<div class="flex flex-col max-w-2xl overflow-hidden border-r border-gray-900">
+  @for(post of posts$ | async; track trackByPostId($index, post)) {
+  <a
+    [routerLink]="['/posts', post.id]"
+    class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
+  >
+    <app-post-card [post]="post"></app-post-card>
+  </a>
+  } @empty {
+  <div class="flex flex-col items-center justify-center">
+    <span>No posts found.</span>
+  </div>
+  }
+</div>

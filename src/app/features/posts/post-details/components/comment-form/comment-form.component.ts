@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Comment } from '@app/core/models/comment.model';
+import { Comment } from '@app/models/comment.model';
 
 @Component({
   selector: 'app-comment-form',

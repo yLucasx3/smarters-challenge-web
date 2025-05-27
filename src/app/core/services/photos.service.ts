@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Photo } from '../models/photo.model';
+import { Photo } from '../../models/photo.model';
 import { BaseService } from './base.service';
 import { Injectable } from '@angular/core';
 

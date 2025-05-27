@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Post } from '@app/core/models/post.model';
+import { Post } from '@app/models/post.model';
 import { UserService } from '@app/core/services/user.service';
 import { catchError, map, Observable, of } from 'rxjs';
-import { User } from '@app/core/models/user.model';
+import { User } from '@app/models/user.model';
 
 @Component({
   selector: 'app-post-card',

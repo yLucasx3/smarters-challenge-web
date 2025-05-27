@@ -16,4 +16,11 @@ export const routes: Routes = [
         (m) => m.PostDetailComponent
       ),
   },
+  {
+    path: 'posts/authors/:userId',
+    loadComponent: () =>
+      import('./features/posts/author-posts/author-posts.component').then(
+        (m) => m.AuthorPostsComponent
+      ),
+  },
 ];

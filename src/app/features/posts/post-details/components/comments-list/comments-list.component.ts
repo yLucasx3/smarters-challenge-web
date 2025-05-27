@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Comment } from '@app/core/models/comment.model';
+import { Comment } from '@app/models/comment.model';
 
 @Component({
   selector: 'app-comments-list',
