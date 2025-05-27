@@ -1,0 +1,20 @@
+<div
+  class="flex flex-col max-w-2xl py-5 overflow-hidden border-r border-gray-900"
+>
+  <app-search-bar (search)="onSearch($event)" class="mb-4"></app-search-bar>
+
+  <div *ngFor="let post of posts$ | async; trackBy: trackByPostId">
+    <a
+      [routerLink]="['/posts', post.userId]"
+      class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
+    >
+      <app-post-card [post]="post"></app-post-card>
+    </a>
+  </div>
+  <app-pagination
+    [currentPage]="(currentPage$ | async)!"
+    [pageSize]="pageSize"
+    [totalItems]="totalPosts"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>
