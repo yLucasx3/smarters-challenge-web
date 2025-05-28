@@ -18,7 +18,6 @@ import { PostCardComponent } from '@app/shared/components/post-card/post-card.co
 import { User } from '@app/models/user.model';
 import { CommentsListComponent } from './components/comments-list/comments-list.component';
 import { PostCardSkeletonComponent } from '@app/shared/components/post-card/post-card-skeleton/post-card-skeleton.component';
-import { CommentsListSkeletonComponent } from './components/comments-list-skeleton/comments-list-skeleton.component';
 
 @Component({
   selector: 'app-post-detail',
@@ -30,7 +29,6 @@ import { CommentsListSkeletonComponent } from './components/comments-list-skelet
     RouterModule,
     PostCardComponent,
     PostCardSkeletonComponent,
-    CommentsListSkeletonComponent,
   ],
   templateUrl: './post-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
