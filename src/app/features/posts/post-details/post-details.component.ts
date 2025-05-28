@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PostService } from '../../../core/services/post.service';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { CommentFormComponent } from '@app/features/posts/post-details/components/comment-form/comment-form.component';
 import { Post } from '@app/models/post.model';
@@ -17,6 +17,8 @@ import { Comment } from '@app/models/comment.model';
 import { PostCardComponent } from '@app/shared/components/post-card/post-card.component';
 import { User } from '@app/models/user.model';
 import { CommentsListComponent } from './components/comments-list/comments-list.component';
+import { PostCardSkeletonComponent } from '@app/shared/components/post-card/post-card-skeleton/post-card-skeleton.component';
+import { CommentsListSkeletonComponent } from './components/comments-list-skeleton/comments-list-skeleton.component';
 
 @Component({
   selector: 'app-post-detail',
@@ -27,6 +29,8 @@ import { CommentsListComponent } from './components/comments-list/comments-list.
     CommonModule,
     RouterModule,
     PostCardComponent,
+    PostCardSkeletonComponent,
+    CommentsListSkeletonComponent,
   ],
   templateUrl: './post-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +41,8 @@ export class PostDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   post$!: Observable<Post>;
+  isPostLoading$ = new BehaviorSubject<boolean>(true);
+  isCommentsLoading$ = new BehaviorSubject<boolean>(true);
   user$!: Observable<User>;
   comments$!: Observable<Comment[]>;
   postId!: number;
@@ -48,9 +54,19 @@ export class PostDetailComponent implements OnInit {
         this.postId = +params.get('id')!;
         return this.postService.getPost(this.postId);
       }),
-      catchError(() =>
-        of({ id: 0, title: 'Error', body: 'Post not found', userId: 0 } as Post)
-      )
+      map((post) => {
+        this.isPostLoading$.next(false);
+        return post;
+      }),
+      catchError(() => {
+        this.isPostLoading$.next(false);
+        return of({
+          id: 0,
+          title: 'Error',
+          body: 'Post not found',
+          userId: 0,
+        } as Post);
+      })
     );
 
     this.user$ = this.post$.pipe(
@@ -61,7 +77,14 @@ export class PostDetailComponent implements OnInit {
       switchMap((params) =>
         this.postService.getPostComements(+params.get('id')!)
       ),
-      catchError(() => of([] as Comment[]))
+      map((comments) => {
+        this.isCommentsLoading$.next(false);
+        return comments;
+      }),
+      catchError(() => {
+        this.isCommentsLoading$.next(false);
+        return of([] as Comment[]);
+      })
     );
   }
 

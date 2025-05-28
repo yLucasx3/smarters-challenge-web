@@ -6,6 +6,8 @@ import {
   combineLatest,
   map,
   startWith,
+  catchError,
+  of,
 } from 'rxjs';
 import { SearchBarComponent } from '@app/shared/components/search-bar/search-bar.component';
 import { PaginationComponent } from '@app/shared/components/pagination/pagination.component';
@@ -13,6 +15,7 @@ import { PostCardComponent } from '@app/shared/components/post-card/post-card.co
 import { RouterModule } from '@angular/router';
 import { PostService } from '@app/core/services/post.service';
 import { Post } from '@app/models/post.model';
+import { PostCardSkeletonComponent } from '@app/shared/components/post-card/post-card-skeleton/post-card-skeleton.component';
 
 @Component({
   selector: 'app-post-feed',
@@ -22,6 +25,7 @@ import { Post } from '@app/models/post.model';
     SearchBarComponent,
     PaginationComponent,
     PostCardComponent,
+    PostCardSkeletonComponent,
     RouterModule,
   ],
   templateUrl: './post-feed.component.html',
@@ -31,6 +35,7 @@ export class PostFeedComponent {
   private postService = inject(PostService);
 
   posts$!: Observable<Post[]>;
+  isLoading$ = new BehaviorSubject<boolean>(true);
   searchTerm$ = new BehaviorSubject<string>('');
   currentPage$ = new BehaviorSubject<number>(1);
   pageSize = 10;
@@ -39,13 +44,18 @@ export class PostFeedComponent {
   constructor() {
     this.posts$ = combineLatest([
       this.postService.getPosts().pipe(
-        map((posts) =>
-          posts.map((post) => ({
+        map((posts) => {
+          this.isLoading$.next(false);
+          return posts.map((post) => ({
             ...post,
             body: this.getBody(post.body),
-          }))
-        ),
-        startWith([])
+          }));
+        }),
+        startWith([]),
+        catchError(() => {
+          this.isLoading$.next(false);
+          return of([]);
+        })
       ),
       this.searchTerm$,
       this.currentPage$,
@@ -76,9 +86,5 @@ export class PostFeedComponent {
     if (page >= 1 && page <= Math.ceil(this.totalPosts / this.pageSize)) {
       this.currentPage$.next(page);
     }
-  }
-
-  trackByPostId(_index: number, post: Post): number {
-    return post.id;
   }
 }

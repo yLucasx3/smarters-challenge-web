@@ -8,18 +8,25 @@
     <h1 class="text-2xl font-bold">Post</h1>
   </div>
 
-  @if (post$ | async; as post) {
+  @if (isPostLoading$ | async) {
+  <div
+    class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
+  >
+    <app-post-card-skeleton></app-post-card-skeleton>
+  </div>
+
+  } @if (post$ | async; as post) {
   <a
     [routerLink]="['/posts', post.userId]"
     class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
   >
     <app-post-card [post]="post"></app-post-card>
   </a>
-  }
-
+  } @if (isCommentsLoading$ | async) { }
   <app-comments-list
     [remoteComments]="(comments$ | async) || []"
     [localComments]="localComments"
+    [isLoading]="isCommentsLoading$ | async"
   ></app-comments-list>
   <app-comment-form
     [postId]="postId"

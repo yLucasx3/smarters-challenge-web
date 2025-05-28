@@ -3,18 +3,32 @@
 >
   <app-search-bar (search)="onSearch($event)" class="mb-4"></app-search-bar>
 
-  @for (post of posts$ | async; track trackByPostId($index, post)) {
-  <a
-    [routerLink]="['/posts', post.id]"
-    class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
-  >
-    <app-post-card [post]="post"></app-post-card>
-  </a>
-  } @empty {
-  <div class="flex flex-col items-center justify-center">
-    <span>No posts found.</span>
+  @if (isLoading$ | async) {
+  <div>
+    @for (item of [].constructor(10); track $index) {
+    <div
+      class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
+    >
+      <app-post-card-skeleton></app-post-card-skeleton>
+    </div>
+    }
   </div>
   }
+  <div>
+    @for (post of posts$ | async; track $index) {
+    <a
+      class="block p-5 border-b border-gray-800 hover:bg-gray-950 transition-colors"
+      [routerLink]="['/posts', post.id]"
+    >
+      <app-post-card [post]="post"></app-post-card>
+    </a>
+    } @empty {
+    <div class="flex flex-col items-center justify-center">
+      <span>No posts found.</span>
+    </div>
+    }
+  </div>
+
   <app-pagination
     [currentPage]="(currentPage$ | async)!"
     [pageSize]="pageSize"

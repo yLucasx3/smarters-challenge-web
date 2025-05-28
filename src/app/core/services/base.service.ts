@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export abstract class BaseService {
@@ -9,7 +9,7 @@ export abstract class BaseService {
   protected http = inject(HttpClient);
 
   protected get<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${this.apiUrl}${endpoint}`);
+    return this.http.get<T>(`${this.apiUrl}${endpoint}`).pipe(delay(1000));
   }
 
   protected post<T>(endpoint: string, body: any): Observable<T> {

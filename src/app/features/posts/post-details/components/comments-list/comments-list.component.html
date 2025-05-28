@@ -2,27 +2,33 @@
   <span class="px-4 py-2 text-lg font-semibold border-b border-gray-900"
     >Comments</span
   >
-  <ng-container
-    *ngIf="remoteComments?.length || localComments?.length; else noComments"
+
+  @if (isLoading) {
+  <div>
+    @for(item of [].constructor(7); track $index) {
+    <app-comments-list-skeleton></app-comments-list-skeleton>
+    }
+  </div>
+  } @if(remoteComments.length) {
+  <div
+    class="flex flex-col px-2 border-b border-gray-900 p-5 gap-2"
+    *ngFor="let comment of remoteComments"
   >
-    <div
-      class="flex flex-col px-2 border-b border-gray-900 p-5 gap-2"
-      *ngFor="let comment of remoteComments"
-    >
-      <span class="text-sm">{{ comment.email }} - {{ comment.name }}</span>
+    <span class="text-sm">{{ comment.email }} - {{ comment.name }}</span>
 
-      <p class="text-gray-700">{{ comment.body }}</p>
-    </div>
+    <p class="text-gray-700">{{ comment.body }}</p>
+  </div>
 
-    <div
-      class="flex flex-col px-2 border-b border-gray-900 p-5 gap-2"
-      *ngFor="let comment of localComments"
-    >
-      <span class="text-sm">{{ comment.email }} - {{ comment.name }}</span>
-      <p class="text-gray-700">{{ comment.body }}</p>
-    </div>
-  </ng-container>
-  <ng-template #noComments>
-    <p class="text-gray-500 italic">No comments yet.</p>
-  </ng-template>
+  } @if (localComments.length) {
+  <div
+    class="flex flex-col px-2 border-b border-gray-900 p-5 gap-2"
+    *ngFor="let comment of localComments"
+  >
+    <span class="text-sm">{{ comment.email }} - {{ comment.name }}</span>
+    <p class="text-gray-700">{{ comment.body }}</p>
+  </div>
+
+  } @if (!remoteComments.length && !localComments.length && !isLoading) {
+  <p class="text-gray-500 italic">No comments yet.</p>
+  }
 </div>
